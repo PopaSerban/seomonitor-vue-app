@@ -8,7 +8,8 @@
         <h1>User management tool</h1>
       </div>
       <div class="users-container">
-        <h3 class="pill">Users fetched: {{ userFetchedCount }}</h3>
+        <LoadSpinner v-if="userFetchedCount === 0"></LoadSpinner>
+        <h3 v-else class="pill">Users fetched: {{ userFetchedCount }}</h3>
       </div>
     </div>
     <img alt="Github logo" src="../assets/github-mark.png" />
@@ -16,8 +17,12 @@
 </template>
 
 <script>
+import LoadSpinner from "./reusable/Spinner.vue";
 export default {
   name: "AppHeader",
+  components: {
+    LoadSpinner,
+  },
   computed: {
     userFetchedCount() {
       return this.$store.getters.loadedUsersCount;
@@ -61,15 +66,15 @@ header {
   text-align: start;
 }
 
-.user-container {
+.users-container {
   display: flex;
   flex-direction: column;
   align-items: end;
+  padding-left: 3rem;
 }
 
 .pill {
   background-color: #6bdfad;
-  margin-left: 3rem;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
 }
