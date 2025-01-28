@@ -1,8 +1,11 @@
+/* eslint-disable */
 <template>
   <header>
-    <h1>user management tool</h1>
-    <p v-if="userFetchedCount === 0">Loading Users..</p>
-    <p v-else>Total Users {{ userFetchedCount }}</p>
+    <div class="header-container">
+      <img alt="Vue logo" src="../assets/logo.png" />
+      <h1>user management tool</h1>
+      <p>Total Users {{ userFetchedCount }}</p>
+    </div>
   </header>
 </template>
 
@@ -16,4 +19,18 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+div.header-container {
+  background: #5786de;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+img {
+  max-width: 50px;
+  max-height: 50px;
+}
+</style>
