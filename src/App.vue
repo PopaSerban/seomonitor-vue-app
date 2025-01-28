@@ -29,4 +29,16 @@ export default {
   color: #2c3e50;
   margin-top: 0;
 }
+
+/* Global Reset of borders and outline */
+* {
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
 </style>
