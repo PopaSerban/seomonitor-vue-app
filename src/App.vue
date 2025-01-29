@@ -4,7 +4,9 @@
     <AppHeader></AppHeader>
     <div class="dashboard-container">
       <UserList @show-details="userSelected"></UserList>
-      <UserDetails></UserDetails>
+      <template v-if="!isLoading">
+        <UserDetails></UserDetails>
+      </template>
     </div>
   </div>
 </template>
@@ -21,6 +23,11 @@ export default {
     AppHeader,
     UserList,
     UserDetails,
+  },
+  computed: {
+    isLoading() {
+      return this.$store.getters.isFetchingUsers;
+    },
   },
   methods: {
     userSelected(user) {
