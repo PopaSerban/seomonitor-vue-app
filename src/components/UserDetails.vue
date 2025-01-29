@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div class="user-details-container">
     <template v-if="user">
@@ -6,22 +7,32 @@
         <div v-for="(value, key) in userToRender" :key="key" class="row">
           <template v-if="typeof value === 'object'">
             <div class="segment">
-              <h3>{{ key }}</h3>
+              <h3>{{ capitalizeFirstLetter(key) }}</h3>
               <div
                 v-for="(subValue, subKey) in value"
                 :key="subKey"
                 class="sub-row"
               >
-                <p>
-                  <strong>{{ subKey }}:</strong> {{ subValue }}
-                </p>
+                <div class="pill">
+                  <span>
+                    <strong>{{ capitalizeFirstLetter(subKey) }}:</strong>
+                  </span>
+                </div>
+                <span>
+                  {{ subValue }}
+                </span>
               </div>
             </div>
           </template>
           <template v-else>
-            <p>
-              <strong>{{ key }}:</strong> {{ value }}
-            </p>
+            <div class="pill">
+              <span>
+                <strong>{{ capitalizeFirstLetter(key) }}:</strong>
+              </span>
+            </div>
+            <span>
+              {{ value }}
+            </span>
           </template>
         </div>
       </div>
@@ -33,7 +44,7 @@
           src="../assets/disappointed-face.png"
           alt="Sad logo"
         />
-        <p>No user selected.</p>
+        <span>No user selected.</span>
       </div>
     </template>
   </div>
@@ -67,8 +78,14 @@ export default {
       const flattenedUser = { ...user };
       if (flattenedUser.address && flattenedUser.address.geo) {
         flattenedUser.address.geo = `${user.address.geo.lat}, ${user.address.geo.lng}`;
+      } else {
+        flattenedUser.address.geo = "N/A";
       }
       return flattenedUser;
+    },
+    capitalizeFirstLetter(str) {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1);
     },
   },
 };
@@ -82,16 +99,41 @@ export default {
   border-radius: 16px;
 }
 
+.details-container {
+  min-width: 500px;
+}
+
+.row,
+.sub-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+}
+
+.pill {
+  padding: 3px 2px;
+  border: none;
+  border-radius: 16px;
+  background-color: #3fb883;
+  color: white;
+  margin-right: 10px;
+}
+
 .user-container {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  /* flex-direction: column; */
+}
+
+span,
+h3 {
+  text-align: start;
+  width: max-content;
+  margin: 8px 0;
 }
 
 .sad-logo {
   max-width: 100px;
   max-height: 100px;
   filter: hue-rotate(66deg);
-  /* Adjust the hue shift */
 }
 </style>
