@@ -1,26 +1,66 @@
 <template>
   <div class="table-container">
-    <div class="transaction-table">
+    <div class="user-table">
       <div class="table-header">
         <div class="col-profile">Profile</div>
-        <div class="col-name auto">Full Name</div>
+        <div class="col-name">Full Name</div>
         <div class="col-action">Actions</div>
       </div>
-      <div v-if="users.length === 0">
-        <LoadingTable class="table-rows" :rowsNumber="10"></LoadingTable>
-      </div>
-      <div v-else v-for="user in users" :key="user.id" class="table-row">
-        <div class="profile">
-          <span>{{ getInitials(user.name) }}</span>
+      <template v-if="isLoading">
+        <LoadingTable :rows-number="10" />
+      </template>
+      <template v-else>
+        <div v-for="user in users" :key="user.id" class="table-row">
+          <div class="profile">
+            <span>{{ getInitials(user.name) }}</span>
+          </div>
+          <div class="name">{{ user.name }}</div>
+          <div class="action">
+            <button @click="showDetails(user)" class="details-button">
+              More Details
+            </button>
+          </div>
         </div>
-        <div class="name auto">{{ user.name }}</div>
-        <div class="action">
-          <button @click="showDetails(user)">More Details</button>
-        </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
+
+<script>
+import LoadingTable from "./reusable/LoadingTable.vue";
+
+export default {
+  name: "UserList",
+  components: {
+    LoadingTable,
+  },
+  computed: {
+    users() {
+      return this.$store.getters.loadedUsers;
+    },
+    isLoading() {
+      return this.$store.getters.isFetchingUsers;
+    },
+  },
+  created() {
+    this.$store.dispatch("fetchUsers");
+  },
+  methods: {
+    getInitials(name) {
+      if (!name) return "";
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase();
+    },
+    showDetails(user) {
+      this.$emit("show-details", user);
+    },
+  },
+};
+</script>
+
 <style scoped>
 .table-container {
   display: flex;
@@ -30,19 +70,19 @@
   overflow-x: auto;
 }
 
-.transaction-table {
+.user-table {
   display: grid;
   width: 100%;
   max-width: 100%;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1rem 2rem;
   overflow: hidden;
   border: 1px solid #e0e0e0;
 }
 
 .table-header {
   display: grid;
-  grid-template-columns: 100px auto 120px;
+  grid-template-columns: 100px 1fr 120px;
   font-weight: bold;
   padding: 12px;
   align-items: center;
@@ -51,8 +91,8 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 100px auto 120px;
-  align-items: left;
+  grid-template-columns: 100px 1fr 120px;
+  align-items: center;
   padding: 12px;
   border-bottom: 1px solid #ddd;
 }
@@ -77,13 +117,6 @@
   text-align: left;
 }
 
-.auto {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  padding-left: 12px;
-}
-
 .col-action {
   display: flex;
   align-items: center;
@@ -92,51 +125,19 @@
 
 .action {
   text-align: right;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-button {
+.details-button {
   padding: 6px 12px;
   border: none;
   border-radius: 16px;
   background-color: #3fb883;
   color: white;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+.details-button:hover {
   background-color: #369e71;
 }
 </style>
-<script>
-import LoadingTable from "./reusable/LoadingTable.vue";
-
-export default {
-  name: "UserList",
-  components: {
-    LoadingTable,
-  },
-  created() {
-    this.$store.dispatch("fetchUsers");
-  },
-  computed: {
-    users() {
-      return this.$store.getters.loadedUsers;
-    },
-  },
-  methods: {
-    getInitials(name) {
-      return name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase();
-    },
-    showDetails(transaction) {
-      alert(`Showing details for ${transaction.name}`);
-    },
-  },
-};
-</script>

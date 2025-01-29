@@ -8,28 +8,29 @@
         <h1>User management tool</h1>
       </div>
       <div class="users-container">
-        <LoadSpinner v-if="userFetchedCount === 0"></LoadSpinner>
-        <h3 v-else class="pill">Users fetched: {{ userFetchedCount }}</h3>
+        <template v-if="isLoading">
+          <LoadSpinner></LoadSpinner>
+        </template>
+        <template v-else>
+          <h3 class="pill">Users fetched: {{ userFetchedCount }}</h3>
+        </template>
       </div>
     </div>
-    <img alt="Github logo" src="../assets/github-mark.png" />
+    <a
+      href="https://github.com/PopaSerban/seomonitor-vue-app"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        alt="GitHub logo"
+        src="../assets/github-mark.png"
+        class="github-logo"
+      />
+    </a>
+    <!-- <img alt="Github logo" src="../assets/github-mark.png" /> -->
   </header>
 </template>
 
-<script>
-import LoadSpinner from "./reusable/Spinner.vue";
-export default {
-  name: "AppHeader",
-  components: {
-    LoadSpinner,
-  },
-  computed: {
-    userFetchedCount() {
-      return this.$store.getters.loadedUsersCount;
-    },
-  },
-};
-</script>
 <style scoped>
 header {
   display: flex;
@@ -42,6 +43,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  overflow-x: auto;
   gap: 1rem;
   margin-left: 1rem;
   padding: 1rem;
@@ -50,6 +52,7 @@ header {
 .welcome-container {
   display: flex;
   align-items: start;
+  min-width: max-content;
   flex-direction: column;
 }
 
@@ -75,6 +78,7 @@ header {
 
 .pill {
   background-color: #6bdfad;
+  min-width: max-content;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
 }
@@ -85,3 +89,20 @@ img {
   margin-right: 1rem;
 }
 </style>
+<script>
+import LoadSpinner from "./reusable/Spinner.vue";
+export default {
+  name: "AppHeader",
+  components: {
+    LoadSpinner,
+  },
+  computed: {
+    userFetchedCount() {
+      return this.$store.getters.loadedUsersCount;
+    },
+    isLoading() {
+      return this.$store.getters.isFetchingUsers;
+    },
+  },
+};
+</script>
