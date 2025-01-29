@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div class="user-details-container">
     <template v-if="user">
@@ -19,7 +18,7 @@
                   </span>
                 </div>
                 <span>
-                  {{ subValue }}
+                  {{ checkNotApplicable(subValue) }}
                 </span>
               </div>
             </div>
@@ -31,7 +30,7 @@
               </span>
             </div>
             <span>
-              {{ value }}
+              {{ checkNotApplicable(value) }}
             </span>
           </template>
         </div>
@@ -44,7 +43,7 @@
           src="../assets/disappointed-face.png"
           alt="Sad logo"
         />
-        <span>No user selected.</span>
+        <p>No user selected.</p>
       </div>
     </template>
   </div>
@@ -78,14 +77,18 @@ export default {
       const flattenedUser = { ...user };
       if (flattenedUser.address && flattenedUser.address.geo) {
         flattenedUser.address.geo = `${user.address.geo.lat}, ${user.address.geo.lng}`;
-      } else {
-        flattenedUser.address.geo = "N/A";
       }
       return flattenedUser;
     },
     capitalizeFirstLetter(str) {
       if (!str) return "";
       return str.charAt(0).toUpperCase() + str.slice(1);
+    },
+    checkNotApplicable(value) {
+      return typeof value === "string" &&
+        value.toLowerCase().includes("undefined")
+        ? "N/A"
+        : value;
     },
   },
 };
