@@ -6,12 +6,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
-    selecteduser: null,
+    selectedUser: null,
     isFetchingUsers: false,
   },
   getters: {
     loadedUsers: (state) => state.users,
-    selectedUser: (state) => state.selecteduser,
+    selectedUser: (state) => state.selectedUser,
     loadedUsersCount: (state) => (state.users ? state.users.length : 0),
     isFetchingUsers: (state) => state.isFetchingUsers,
   },
@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.users = users;
     },
     setSelectedUser(state, selectedUser) {
-      state.selecteduser = selectedUser;
+      state.selectedUser = selectedUser;
     },
     setFetchingUsersState(state, isFetching) {
       state.isFetchingUsers = isFetching;
